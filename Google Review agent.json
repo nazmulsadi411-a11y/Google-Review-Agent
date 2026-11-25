@@ -1,0 +1,1318 @@
+{
+  "name": "Google Review agent",
+  "nodes": [
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1VfTJo0_8LE8IoUaDNpGe37BtrSBxPM4YZEsgr0OZUZg",
+          "mode": "list",
+          "cachedResultName": "Customer Demo",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VfTJo0_8LE8IoUaDNpGe37BtrSBxPM4YZEsgr0OZUZg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Customer Demo",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VfTJo0_8LE8IoUaDNpGe37BtrSBxPM4YZEsgr0OZUZg/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -128,
+        848
+      ],
+      "id": "d25965e1-3179-43ca-b526-3f4f5f7d30a4",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "5OeOiyZ64j7GZkrw",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "bf2bf57b-a261-40be-b0b3-8f4e5eacfa7c",
+              "leftValue": "={{ $json['Review msg Status'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        400,
+        832
+      ],
+      "id": "e6a57424-fc9b-4f7f-82ca-bf7f3f4c3ef4",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        768,
+        816
+      ],
+      "id": "f4a98ac7-7b9d-4645-9311-f0e0abb0cda7",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.Email }}",
+        "subject": "Your Review is Important",
+        "emailType": "text",
+        "message": "=Hey  {{ $json.Name }},\nPlease leave a google review here.\n\nhttps://velvety-mandazi-0d95ab.netlify.app/?e={{ $json.Email }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1072,
+        832
+      ],
+      "id": "9edee501-ff35-4bca-8e66-af1ecdcda756",
+      "name": "Send a message",
+      "webhookId": "8053af82-ca79-419d-9ddd-d0f653fdfb6d",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "aMDqYLMYI1a4yX37",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1VfTJo0_8LE8IoUaDNpGe37BtrSBxPM4YZEsgr0OZUZg",
+          "mode": "list",
+          "cachedResultName": "Customer Demo",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VfTJo0_8LE8IoUaDNpGe37BtrSBxPM4YZEsgr0OZUZg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Customer Demo",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VfTJo0_8LE8IoUaDNpGe37BtrSBxPM4YZEsgr0OZUZg/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $('Loop Over Items').item.json.Email }}",
+            "Review msg Status": "SENT"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Date of Visit",
+              "displayName": "Date of Visit",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Job Type",
+              "displayName": "Job Type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Job Status",
+              "displayName": "Job Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Review msg Status",
+              "displayName": "Review msg Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Clicked or Not ",
+              "displayName": "Clicked or Not ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Rating ≤ 3",
+              "displayName": "Rating ≤ 3",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Feedback",
+              "displayName": "Feedback",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1360,
+        848
+      ],
+      "id": "c351f99a-738d-4265-ae72-4f0fb18abd20",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "5OeOiyZ64j7GZkrw",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1408,
+        640
+      ],
+      "id": "9d0b0edc-b7d8-4663-bbf5-4998bf81110b",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "seconds",
+              "secondsInterval": 10
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -448,
+        848
+      ],
+      "id": "208dd28b-fa9b-4ce6-bd0b-ec325893e43d",
+      "name": "Schedule Trigger1"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "Register",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -304,
+        1280
+      ],
+      "id": "bdaebed6-8486-4d19-89b0-1d17bd0ad5a1",
+      "name": "Webhook",
+      "webhookId": "dff647ae-51e5-4f08-aeaa-860e0cfa6391"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        368,
+        1280
+      ],
+      "id": "861dc1a4-790e-4c3c-87ac-d8767b59da60",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nreturn $input.all().map(item => {\n  let body = item.json.body;\n\n  // Parse body if it is a JSON string\n  if (typeof body === 'string') {\n    body = JSON.parse(body);\n  }\n\n  return {\n    json: body\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -48,
+        1280
+      ],
+      "id": "a26c86b7-805c-49f8-a7aa-4dfa01565446",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1VfTJo0_8LE8IoUaDNpGe37BtrSBxPM4YZEsgr0OZUZg",
+          "mode": "list",
+          "cachedResultName": "Customer Demo",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VfTJo0_8LE8IoUaDNpGe37BtrSBxPM4YZEsgr0OZUZg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Customer Demo",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VfTJo0_8LE8IoUaDNpGe37BtrSBxPM4YZEsgr0OZUZg/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Clicked or Not ": "CLICKED",
+            "Email": "={{ $json.customer_id }}"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Date of Visit",
+              "displayName": "Date of Visit",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Review msg Status",
+              "displayName": "Review msg Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Clicked or Not ",
+              "displayName": "Clicked or Not ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Rating ≤ 3",
+              "displayName": "Rating ≤ 3",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Feedback",
+              "displayName": "Feedback",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        176,
+        1280
+      ],
+      "id": "61378c5f-2da6-4342-96e2-0ae1b968314d",
+      "name": "Append or update row in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "5OeOiyZ64j7GZkrw",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Register\n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/components/sticky-notes/)",
+        "height": 224,
+        "width": 1184,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -448,
+        1216
+      ],
+      "id": "5aafe628-a127-4ccf-8c47-4dcfad181bc0",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nreturn $input.all().map(item => {\n  let body = item.json.body;\n\n  if (typeof body === 'string') {\n    body = JSON.parse(body);\n  }\n\n  return {\n    json: body\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -16,
+        1808
+      ],
+      "id": "92ee2ea2-3bfe-4265-be1e-c9bad4394996",
+      "name": "Code in JavaScript3"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        688,
+        1808
+      ],
+      "id": "e17b2263-82ed-4ef6-8c7e-b3dece712028",
+      "name": "Respond to Webhook3"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "Feedback Collection",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -336,
+        1808
+      ],
+      "id": "65208c39-7e97-4db5-af92-0d3725bc59e8",
+      "name": "Webhook3",
+      "webhookId": "dff647ae-51e5-4f08-aeaa-860e0cfa6391"
+    },
+    {
+      "parameters": {
+        "content": "## Feedback \n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/components/sticky-notes/)",
+        "height": 416,
+        "width": 1316,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -448,
+        1632
+      ],
+      "id": "622f98dd-7253-4327-a715-bbb2c4560094",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1VfTJo0_8LE8IoUaDNpGe37BtrSBxPM4YZEsgr0OZUZg",
+          "mode": "list",
+          "cachedResultName": "Customer Demo",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VfTJo0_8LE8IoUaDNpGe37BtrSBxPM4YZEsgr0OZUZg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Customer Demo",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VfTJo0_8LE8IoUaDNpGe37BtrSBxPM4YZEsgr0OZUZg/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $json.customer_id }}",
+            "Rating ≤ 3": "={{ $json.rating }}",
+            "Feedback": "={{ $json.feedback }}"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Date of Visit",
+              "displayName": "Date of Visit",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Job Type",
+              "displayName": "Job Type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Job Status",
+              "displayName": "Job Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Review msg Status",
+              "displayName": "Review msg Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Clicked or Not ",
+              "displayName": "Clicked or Not ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Rating ≤ 3",
+              "displayName": "Rating ≤ 3",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Feedback",
+              "displayName": "Feedback",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        256,
+        1808
+      ],
+      "id": "dc0ad778-5ec1-4123-be88-f4657030a1f9",
+      "name": "Append or update row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "5OeOiyZ64j7GZkrw",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "65789304-eb67-4cf3-9a7c-28f12759f7f6",
+              "leftValue": "={{ $json['Job Status'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        112,
+        848
+      ],
+      "id": "218e2ef1-b62f-40c4-9719-b2e2ae0d3068",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1VfTJo0_8LE8IoUaDNpGe37BtrSBxPM4YZEsgr0OZUZg",
+          "mode": "list",
+          "cachedResultName": "Customer Demo",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VfTJo0_8LE8IoUaDNpGe37BtrSBxPM4YZEsgr0OZUZg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Customer Demo",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VfTJo0_8LE8IoUaDNpGe37BtrSBxPM4YZEsgr0OZUZg/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -256,
+        448
+      ],
+      "id": "8e6a3cc2-c46c-40eb-a185-5d08666a115a",
+      "name": "Get row(s) in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "5OeOiyZ64j7GZkrw",
+          "name": "Google Sheets account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "bf2bf57b-a261-40be-b0b3-8f4e5eacfa7c",
+              "leftValue": "={{ $json['Review msg Status'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        592,
+        448
+      ],
+      "id": "72531f99-baac-402d-8bee-37ddf0f6756f",
+      "name": "If2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.Email }}",
+        "subject": "Your Review is Important",
+        "emailType": "text",
+        "message": "=Hey  {{ $json.Name }},\nPlease leave a google review here.\n\nhttps://velvety-mandazi-0d95ab.netlify.app/?e={{ $json.Email }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1232,
+        480
+      ],
+      "id": "541c8644-20c0-4905-a453-6863ba6e1ebe",
+      "name": "Send a message1",
+      "webhookId": "8053af82-ca79-419d-9ddd-d0f653fdfb6d",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "aMDqYLMYI1a4yX37",
+          "name": "Gmail account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1VfTJo0_8LE8IoUaDNpGe37BtrSBxPM4YZEsgr0OZUZg",
+          "mode": "list",
+          "cachedResultName": "Customer Demo",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VfTJo0_8LE8IoUaDNpGe37BtrSBxPM4YZEsgr0OZUZg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Customer Demo",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VfTJo0_8LE8IoUaDNpGe37BtrSBxPM4YZEsgr0OZUZg/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $('Get row(s) in sheet1').item.json.Email }}",
+            "Review msg Status": "SENT"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Date of Visit",
+              "displayName": "Date of Visit",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Review msg Status",
+              "displayName": "Review msg Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Clicked or Not ",
+              "displayName": "Clicked or Not ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Rating ≤ 3",
+              "displayName": "Rating ≤ 3",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Feedback",
+              "displayName": "Feedback",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1472,
+        480
+      ],
+      "id": "1656b3ed-20c8-46f6-b21f-42e8265e5620",
+      "name": "Append or update row in sheet3",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "5OeOiyZ64j7GZkrw",
+          "name": "Google Sheets account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "65789304-eb67-4cf3-9a7c-28f12759f7f6",
+              "leftValue": "={{ $json['Job Status'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        144,
+        432
+      ],
+      "id": "f4bd3f31-90ca-4152-95d7-39c4e35b7866",
+      "name": "If3",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "sendTo": "nazmulhasansadi787@gmail.com",
+        "subject": "=Got A review from {{ $('Code in JavaScript3').item.json.name }}  Rating:{{ $json['Rating ≤ 3'] }}",
+        "emailType": "text",
+        "message": "=🔔 New Private Customer Feedback Received\n\nGood news: Your review filter caught a lower rating before it went public, giving you a chance to make things right with this customer directly.\n\nCustomer Details:\n• Name: {{ $('Code in JavaScript3').item.json.name }}\n• Email: {{ $('Code in JavaScript3').item.json.customer_id }}\n• Rating: {{ $('Code in JavaScript3').item.json.rating }} / 5 Stars\n• Job Type: {{ $json['Job Type'] }}\n\nCustomer Feedback:\n\"{{ $('Code in JavaScript3').item.json.feedback }}\"\n\nNext Step: Contact the customer directly to fix the issue.",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        688,
+        1664
+      ],
+      "id": "3f1fc776-5370-4957-aa20-44ee26d104e0",
+      "name": "Send a message2",
+      "webhookId": "a997b567-b4bd-421b-b177-082ae630968d",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "aMDqYLMYI1a4yX37",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1VfTJo0_8LE8IoUaDNpGe37BtrSBxPM4YZEsgr0OZUZg",
+          "mode": "list",
+          "cachedResultName": "Customer Demo",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VfTJo0_8LE8IoUaDNpGe37BtrSBxPM4YZEsgr0OZUZg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Customer Demo",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VfTJo0_8LE8IoUaDNpGe37BtrSBxPM4YZEsgr0OZUZg/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Email",
+              "lookupValue": "={{ $json.Email }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        480,
+        1664
+      ],
+      "id": "c5e20d64-7ba0-49d8-9393-2056e1739286",
+      "name": "Get row(s) in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "5OeOiyZ64j7GZkrw",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Review Sent\n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/components/sticky-notes/)",
+        "height": 288,
+        "width": 2160
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -512,
+        752
+      ],
+      "id": "f993657d-053b-4e63-9dd3-600d5a0b5256",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -432,
+        2224
+      ],
+      "id": "8701ce5f-a54f-459b-9390-155cb837fbe1",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "=https://serpapi.com/search.json?engine=google_maps_reviews&place_id=ChIJG9wvb_q5woARkSb9kPOo0jo&sort_by=newestFirst&api_key=62dcb8f1f3fdff36acb3574bbb82505d825bb5b3d8c32ff348094fdb9d021038",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        -208,
+        2224
+      ],
+      "id": "7104498e-4cd5-48c3-821e-b0a24c914acf",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "reviews",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1.1,
+      "position": [
+        16,
+        2224
+      ],
+      "id": "67c856f8-50a2-4d65-ac3b-64759e255fea",
+      "name": "Split Out"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet2": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript3": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook3": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook3",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get row(s) in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        []
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message1": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet3": {
+      "main": [
+        []
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet2": {
+      "main": [
+        [
+          {
+            "node": "Send a message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "144170f7-a843-4e42-83d5-540a86ce05c3",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6681fdab095df5ef588e604d0549c57fce78f907a61ce72ca19a16d987efca99"
+  },
+  "nodeGroups": [],
+  "id": "zLsD5PD50niN73sF",
+  "tags": []
+}
